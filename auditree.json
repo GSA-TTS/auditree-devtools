@@ -1,0 +1,14 @@
+{
+  "org": {
+    "auditree": {
+      "repo_integrity": {
+        "branches": {
+          "https://github.com/gsa-tts/continuous-assessment-poc": ["main"]
+        },
+        "repos": [
+          "https://github.com/gsa-tts/continuous-assessment-poc"
+        ]
+      }
+    }
+  }
+}

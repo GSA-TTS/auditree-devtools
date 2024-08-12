@@ -1,0 +1,2 @@
+auditree-framework ~= 2.0
+auditree-arboretum ~= 0.17

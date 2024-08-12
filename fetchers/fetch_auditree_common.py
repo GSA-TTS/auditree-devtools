@@ -1,0 +1,4 @@
+from arboretum.auditree.fetchers.fetch_abandoned_evidence import AbandonedEvidenceFetcher
+from arboretum.auditree.fetchers.fetch_compliance_config import ComplianceConfigFetcher
+from arboretum.auditree.fetchers.github.fetch_repo_metadata import GithubRepoMetaDataFetcher
+from arboretum.auditree.fetchers.github.fetch_branch_protection import GithubRepoBranchProtectionFetcher
