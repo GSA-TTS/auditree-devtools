@@ -1,6 +1,9 @@
 {
   "org": {
     "auditree": {
+      "abandoned_evidence": {
+        "threshold": 0
+      },
       "repo_integrity": {
         "branches": {
           "https://github.com/gsa-tts/continuous-assessment-poc": ["main"]
@@ -9,6 +12,11 @@
           "https://github.com/gsa-tts/continuous-assessment-poc"
         ]
       }
+    },
+    "cloudgov": {
+      "org-name": "gsa-tts-devtools-prototyping",
+      "space-name": "rahearn",
+      "apps": ["continuous_monitoring-staging"]
     }
   }
 }

@@ -1,2 +1,2 @@
-auditree-framework ~= 2.0
+auditree-framework @ git+https://github.com/ComplianceAsCode/auditree-framework.git
 auditree-arboretum ~= 0.17
