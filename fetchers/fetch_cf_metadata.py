@@ -12,23 +12,34 @@ class FetchCfMetadata(ComplianceFetcher):
   @store_raw_evidence("cf/space-ssh.json")
   def fetch_prod_ssh(self):
     config = get_config()
-    data = {"ssh-enabled": self._get_space_ssh_enabled(config),
-            "org": config.get("org.cloudgov.org-name"),
-            "space": config.get("org.cloudgov.space-name")}
-    return json.dumps(data)
+    try:
+      data = {"ssh-enabled": self._get_space_ssh_enabled(config.get("org.cloudgov.space-name")),
+              "org": config.get("org.cloudgov.org-name"),
+              "space": config.get("org.cloudgov.space-name")}
+      return json.dumps(data)
+    except:
+      return "{}"
 
   @parameterized.expand(get_config().get("org.cloudgov.apps"))
   def fetch_app_ssh(self, app):
     evidence_path = f"cf/app-ssh-{app}.json"
     with raw_evidence(self.locker, evidence_path) as evidence:
       if evidence:
-        data = {"ssh-enabled": self._get_app_ssh_enabled(app)}
-        evidence.set_content(json.dumps(data))
+        try:
+          data = {"ssh-enabled": self._get_app_ssh_enabled(app)}
+          evidence.set_content(json.dumps(data))
+        except:
+          evidence.set_content("{}")
 
-  def _get_space_ssh_enabled(self, config):
-    result = subprocess.run(["cf", "space-ssh-allowed", config.get("org.cloudgov.space-name")], capture_output=True, text=True).stdout
-    return result.startswith("ssh support is enabled")
+  def _get_space_ssh_enabled(self, space_name):
+    return not self._get_ssh_disabled("space-ssh-allowed", space_name)
 
   def _get_app_ssh_enabled(self, app_name):
-    result = subprocess.run(["cf", "ssh-enabled", app_name], capture_output=True, text=True).stdout
-    return result.startswith("ssh support is enabled")
+    return not self._get_ssh_disabled("ssh-enabled", app_name)
+
+  def _get_ssh_disabled(self, *args):
+    result = subprocess.run(["cf", *args], capture_output=True, text=True, check=True).stdout
+    if result.startswith("ssh support"):
+      return result.startswith("ssh support is disabled")
+    else:
+      raise AssertionError("stdout did not match expected format")

@@ -16,7 +16,10 @@ class SpaceSSHDisabledCheck(ComplianceCheck):
   def test_space_ssh_disabled(self, evidence):
     evidence = json.loads(evidence.content)
     if evidence["ssh-enabled"] == True:
-      self.add_failures("Cloud.gov SSH Access Violation", f"SSH is enabled for production space: {evidence['space']}")
+      self.add_failures("Cloud.gov SSH Access Violation", {"org": evidence['org'], "space": evidence['space']})
+
+  def get_reports(self):
+    return ["cf/space-ssh.md"]
 
 class AppSSHDisabledCheck(ComplianceCheck):
   @property
@@ -28,4 +31,7 @@ class AppSSHDisabledCheck(ComplianceCheck):
     evidence = self.locker.get_evidence(f"raw/cf/app-ssh-{app}.json")
     enabled = json.loads(evidence.content)["ssh-enabled"]
     if enabled == True:
-      self.add_failures("Cloud.gov SSH Access Violation", f"SSH is enabled for app: {app}")
+      self.add_failures("Cloud.gov SSH Access Violation", {"app": app})
+
+  def get_reports(self):
+    return ["cf/app-ssh.md"]
