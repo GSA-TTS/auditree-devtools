@@ -1,4 +1,8 @@
 {
+  "locker": {
+    "repo_url": "https://github.com/gsa-tts/devtools-auditree-evidence",
+    "ttl_tolerance": 3600
+  },
   "org": {
     "auditree": {
       "abandoned_evidence": {
@@ -13,11 +17,13 @@
           "https://github.com/gsa-tts/continuous-assessment-poc"
         ]
       }
-    },
-    "cloudgov": {
+    }
+  },
+  "gov": {
+    "cloud": {
       "org-name": "gsa-tts-devtools-prototyping",
-      "space-name": "rahearn",
-      "apps": ["continuous_monitoring-staging"]
+      "space-name": "",
+      "apps": []
     }
   }
 }

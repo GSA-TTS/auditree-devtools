@@ -1,7 +1,7 @@
 import json
 
 from compliance.check import ComplianceCheck
-from compliance.evidence import with_raw_evidences
+from compliance.evidence import with_raw_evidences, evidences
 
 from compliance.config import get_config
 
@@ -26,12 +26,13 @@ class AppSSHDisabledCheck(ComplianceCheck):
   def title(self):
     return "Cloud.gov App SSH Disabled Check"
 
-  @parameterized.expand(get_config().get("org.cloudgov.apps"))
+  @parameterized.expand(get_config().get("gov.cloud.apps"))
   def test_app_ssh_disabled(self, app):
-    evidence = self.locker.get_evidence(f"raw/cf/app-ssh-{app}.json")
-    enabled = json.loads(evidence.content)["ssh-enabled"]
-    if enabled == True:
-      self.add_failures("Cloud.gov SSH Access Violation", {"app": app})
+    evidence_path = f"raw/cf/app-ssh-{app}.json"
+    with evidences(self, evidence_path) as evidence:
+      enabled = json.loads(evidence.content)["ssh-enabled"]
+      if enabled == True:
+        self.add_failures("Cloud.gov SSH Access Violation", {"app": app})
 
   def get_reports(self):
     return ["cf/app-ssh.md"]

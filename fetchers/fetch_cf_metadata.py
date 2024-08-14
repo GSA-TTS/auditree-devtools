@@ -13,14 +13,14 @@ class FetchCfMetadata(ComplianceFetcher):
   def fetch_prod_ssh(self):
     config = get_config()
     try:
-      data = {"ssh-enabled": self._get_space_ssh_enabled(config.get("org.cloudgov.space-name")),
-              "org": config.get("org.cloudgov.org-name"),
-              "space": config.get("org.cloudgov.space-name")}
+      data = {"ssh-enabled": self._get_space_ssh_enabled(config.get("gov.cloud.space-name")),
+              "org": config.get("gov.cloud.org-name"),
+              "space": config.get("gov.cloud.space-name")}
       return json.dumps(data)
     except:
       return "{}"
 
-  @parameterized.expand(get_config().get("org.cloudgov.apps"))
+  @parameterized.expand(get_config().get("gov.cloud.apps"))
   def fetch_app_ssh(self, app):
     evidence_path = f"cf/app-ssh-{app}.json"
     with raw_evidence(self.locker, evidence_path) as evidence:
