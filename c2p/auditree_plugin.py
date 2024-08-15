@@ -89,6 +89,8 @@ class PluginAuditree(PluginSpec):
             for check_method_name, check_method_result in get_dict_safely(check_class_result, 'checks', []).items():
                 check_id = f'{check_class_name}.{check_method_name}'
                 timestamp = get_dict_safely(check_method_result, 'timestamp')
+                if timestamp is None:
+                    continue
                 dt = datetime.fromtimestamp(timestamp, tz=timezone.utc)
 
                 observation = ObservationByCheck(

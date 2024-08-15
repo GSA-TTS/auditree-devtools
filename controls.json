@@ -2,6 +2,5 @@
   "arboretum.auditree.checks.test_abandoned_evidence.AbandonedEvidenceCheck": ["devtools.arboretum.accred"],
   "arboretum.auditree.checks.test_compliance_config.ComplianceConfigCheck": ["devtools.arboretum.accred"],
   "arboretum.auditree.checks.test_empty_evidence.EmptyEvidenceCheck": ["devtools.arboretum.accred"],
-  "checks.test_cf_ssh.SpaceSSHDisabledCheck": ["devtools.cloudgov.accred"],
-  "checks.test_cf_ssh.AppSSHDisabledCheck": ["devtools.cloudgov.accred"]
+  "checks.test_cf_ssh.SpaceSSHDisabledCheck": ["devtools.cloudgov.accred"]
 }

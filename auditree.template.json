@@ -21,9 +21,8 @@
   },
   "gov": {
     "cloud": {
-      "org-name": "gsa-tts-devtools-prototyping",
-      "space-name": "",
-      "apps": []
+      "org-name": "",
+      "space-names": []
     }
   }
 }
