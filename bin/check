@@ -1,0 +1,11 @@
+#! /usr/bin/env bash
+
+set -e
+
+python c2p/compliance_to_policy.py -c cdef.json -o auditree/auditree.json
+
+cd auditree
+compliance --check devtools.arboretum.accred,devtools.cloudgov.accred -C auditree.json --evidence full-remote &> /dev/null
+
+cd ..
+python c2p/result_to_compliance.py -c cdef.json -i /tmp/compliance/check_results.json

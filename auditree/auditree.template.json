@@ -1,6 +1,7 @@
 {
   "locker": {
-    "repo_url": "https://github.com/gsa-tts/devtools-auditree-evidence",
+    "repo_url": "https://github.com/gsa-tts/MY-EVIDENCE-REPO",
+    "default_branch": "main",
     "ttl_tolerance": 3600
   },
   "org": {
@@ -11,10 +12,10 @@
       },
       "repo_integrity": {
         "branches": {
-          "https://github.com/gsa-tts/continuous-assessment-poc": ["main"]
+          "https://github.com/gsa-tts/MY-PROGRAM-REPO": ["main"]
         },
         "repos": [
-          "https://github.com/gsa-tts/continuous-assessment-poc"
+          "https://github.com/gsa-tts/MY-PROGRAM-REPO"
         ]
       }
     }
