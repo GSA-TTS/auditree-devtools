@@ -6,7 +6,7 @@ if [ "$1" != "init" ]; then
     exit 1
   fi
   if [ -z "$GIT_EMAIL" ]; then
-    echo "Must pass email address for git config to script"
+    echo "Must pass email address for git config to script as GIT_EMAIL"
     exit 1
   fi
 

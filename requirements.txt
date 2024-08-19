@@ -1,3 +1,4 @@
 auditree-framework @ git+https://github.com/ComplianceAsCode/auditree-framework.git
 auditree-arboretum ~= 0.17
+auditree-prune @ git+https://github.com/rahearn/auditree-prune.git
 compliance-to-policy @ git+https://github.com/rahearn/compliance-to-policy.git
