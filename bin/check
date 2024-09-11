@@ -4,8 +4,15 @@ set -e
 
 python c2p/compliance_to_policy.py -c cdef.json -o auditree/auditree.json
 
-cd auditree
-compliance --check devtools.arboretum.accred,devtools.cloudgov.accred -C auditree.json --evidence full-remote &> /dev/null
+(cd auditree && compliance --check devtools.arboretum.accred,devtools.cloudgov.accred -C auditree.json --evidence full-remote)
 
-cd ..
-python c2p/result_to_compliance.py -c cdef.json -i /tmp/compliance/check_results.json
+if [ "$1" = "" ]; then
+  ar="$(mktemp -d)/auditree.json"
+else
+  ar="$1"
+fi
+
+python c2p/result_to_compliance.py -c cdef.json -i /tmp/compliance/check_results.json > $ar
+
+locker_repo=`jq -r ".locker.repo_url" auditree/auditree.json`
+plant-helper -f "$ar" -c assessment-results -d "Auditree check assessment-results" -l "$locker_repo"

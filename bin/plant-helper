@@ -1,0 +1,67 @@
+#! /usr/bin/env bash
+
+usage="
+$0: Plant external evidence in the evidence locker
+
+Usage:
+    $0 -h
+    $0 -f FILE_PATH -c CATEGORY -d DESCRIPTION [-t TTL] -l LOCKER_URL [-b LOCKER_BRANCH] [-n]
+
+Options:
+-h: show help and exit
+-f: file to plant. ex: '/abs/path/to/filename.json'
+-c: Evidence Category
+-d: Evidence Description
+-t: Evidence TTL. Default: 86400
+-l: https version of locker repository
+-b: main branch used in locker repository. Default: 'main'
+-n: Dry run mode
+"
+
+set -e
+
+mode="push-remote"
+branch="main"
+ttl=86400
+file=""
+category=""
+description=""
+locker=""
+
+while getopts "hf:c:d:t:l:b:n" opt; do
+    case "$opt" in
+        f)
+            file=${OPTARG}
+            ;;
+        c)
+            category=${OPTARG}
+            ;;
+        d)
+            description=${OPTARG}
+            ;;
+        t)
+            ttl=${OPTARG}
+            ;;
+        l)
+            locker=${OPTARG}
+            ;;
+        b)
+            branch=${OPTARG}
+            ;;
+        n)
+            mode="dry-run"
+            ;;
+        h)
+            echo "$usage"
+            exit 0
+            ;;
+    esac
+done
+
+if [ "$file" = "" ] || [ "$category" = "" ] || [ "$description" = "" ] || [ "$locker" = "" ]; then
+    echo "$usage"
+    exit 1
+fi
+
+config="{\"$file\":{\"category\":\"$category\",\"ttl\":$ttl,\"description\":\"$description\"}}"
+plant "$mode" "$locker" --branch "$branch" --config "$config"

@@ -28,7 +28,7 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 
-RUN apt-get -y update && apt-get -y install git curl
+RUN apt-get -y update && apt-get -y install git curl jq && apt-get clean
 RUN curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v8&source=github" | tar -zx && mv cf* /usr/local/bin/
 
 WORKDIR /app
@@ -40,7 +40,7 @@ RUN chown appuser /app
 # into this layer.
 RUN --mount=type=cache,target=/root/.cache/pip \
     --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    python -m pip install -r requirements.txt
+    python -m pip install -r requirements.txt --upgrade
 
 # Switch to the non-privileged user to run the application.
 USER appuser

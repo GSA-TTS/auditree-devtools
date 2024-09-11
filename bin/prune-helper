@@ -5,34 +5,32 @@ $0: Prune obsolete evidence from the evidence locker
 
 Usage:
     $0 -h
-    $0 -c PRUNE_CONFIG -l LOCKER_URL [-b LOCKER_BRANCH] [-e EMAIL_ADDRESS] [-d]
+    $0 -f FILE_PATH -r REASON -l LOCKER_URL [-b LOCKER_BRANCH] [-d]
 
 Options:
 -h: show help and exit
--c: prune config. ex: '{\"path/to/filename.json\":\"Reason it is being pruned\"}'
+-f: file to prune. Should be given as a relative path from the root of the evidence repo
+-r: Reason the evidence is being pruned
 -l: https version of locker repository
 -b: main branch used in locker repository. Default: 'main'
--e: your email address. Defaults to '$GIT_EMAIL'
--d: Dry run mode
+-n: Dry run mode
 "
-
-echo "Calling prune-helper script"
 
 set -e
 
 mode="push-remote"
 branch="main"
-config=""
-email="$GIT_EMAIL"
+file=""
+reason=""
 locker=""
 
-while getopts "hc:e:l:b:d" opt; do
+while getopts "hf:r:l:b:n" opt; do
     case "$opt" in
-        c)
-            config=${OPTARG}
+        f)
+            file=${OPTARG}
             ;;
-        e)
-            email=${OPTARG}
+        r)
+            reason=${OPTARG}
             ;;
         l)
             locker=${OPTARG}
@@ -40,7 +38,7 @@ while getopts "hc:e:l:b:d" opt; do
         b)
             branch=${OPTARG}
             ;;
-        d)
+        n)
             mode="dry-run"
             ;;
         h)
@@ -50,9 +48,10 @@ while getopts "hc:e:l:b:d" opt; do
     esac
 done
 
-if [ "$config" = "" ] || [ "$locker" = "" ] || [ "$email" = "" ]; then
+if [ "$file" = "" ] || [ "$reason" = "" ] || [ "$locker" = "" ]; then
     echo "$usage"
     exit 1
 fi
 
-prune "$mode" --config "$config" --git-config "{\"user\":{\"email\":\"$email\"}}" --branch "$branch" "$locker"
+config="{\"$file\":\"$reason\"}"
+prune "$mode" --config "$config" --branch "$branch" "$locker"
