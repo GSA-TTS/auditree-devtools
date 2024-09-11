@@ -13,7 +13,7 @@ Options:
 -r: Reason the evidence is being pruned
 -l: https version of locker repository
 -b: main branch used in locker repository. Default: 'main'
--d: Dry run mode
+-n: Dry run mode
 "
 
 set -e
@@ -24,7 +24,7 @@ file=""
 reason=""
 locker=""
 
-while getopts "hf:r:l:b:d" opt; do
+while getopts "hf:r:l:b:n" opt; do
     case "$opt" in
         f)
             file=${OPTARG}
@@ -38,7 +38,7 @@ while getopts "hf:r:l:b:d" opt; do
         b)
             branch=${OPTARG}
             ;;
-        d)
+        n)
             mode="dry-run"
             ;;
         h)
