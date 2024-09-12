@@ -9,7 +9,7 @@ python c2p/compliance_to_policy.py -c cdef.json -o auditree/auditree.json
 if [ "$1" = "" ]; then
   ar="$(mktemp -d)/auditree.json"
 else
-  ar="$1"
+  ar="$1/auditree.json"
 fi
 
 python c2p/result_to_compliance.py -c cdef.json -i /tmp/compliance/check_results.json > $ar
