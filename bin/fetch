@@ -4,7 +4,6 @@ set -e
 
 python c2p/compliance_to_policy.py -c cdef.json -o auditree/auditree.json
 
-cf api api.fr.cloud.gov
 cf auth
 
 cd auditree
