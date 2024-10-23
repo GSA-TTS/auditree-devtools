@@ -33,19 +33,9 @@ class RoleCollector:
         "user_guid": user.guid,
         "user_type": user.type,
         "user_name": user.username,
-        "roles": list((role.type for role in roles))
+        "roles": list((role.description for role in roles))
       })
     return json.dumps(data)
-
-  def print(self):
-    for user_roles in self._map.values():
-      user = user_roles["user"]
-      print(f"{user.type}: {user.username} has roles:")
-      for role in user_roles["roles"]:
-        if role.space:
-          print(f"  {role.type} in {role.space.name}")
-        else:
-          print(f"  {role.type}")
 
 
 class User:
@@ -75,6 +65,13 @@ class Role:
     self._fields = entity
     self.type = entity["type"]
     self.user = User(entity.user())
+
+  @property
+  def description(self):
+    if self.space:
+      return f"{self.type} in space \"{self.space.name}\""
+    else:
+      return self.type
 
   @property
   def space(self):
