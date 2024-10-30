@@ -1,0 +1,14 @@
+{#- -*- mode:jinja2; coding: utf-8 -*- -#}
+
+# {{ test.title }} {{ now.strftime('%Y-%m-%d') }}
+
+The following users have access to our cloud.gov infrastructure.
+
+{% for section_heading, user_guids in all_successes.items() -%}
+## {{ section_heading }}
+{% for guid in user_guids: %}
+{% set user = test.users[guid] -%}
+* **User**: {{ user["user_name"] }}<br />
+  **Roles**: {{ user["roles"] | join(', ') }}
+{% endfor %}
+{% endfor %}

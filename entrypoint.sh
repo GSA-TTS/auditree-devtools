@@ -13,7 +13,10 @@ if [ "$1" != "init" ]; then
   # 1) configure git
   git config --global user.name "$GIT_EMAIL"
   git config --global user.email "$GIT_EMAIL"
+
+  # 2) set cloud.gov api endpoint
+  cf api api.fr.cloud.gov > /dev/null
 fi
 
-# 2) call program
+# 3) call program
 exec "$@"

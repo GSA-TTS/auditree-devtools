@@ -1,6 +1,8 @@
 import json
 import subprocess
 
+from cloudfoundry_client.client import CloudFoundryClient
+
 from compliance.evidence import raw_evidence
 from compliance.fetch import ComplianceFetcher
 
@@ -8,7 +10,30 @@ from compliance.config import get_config
 
 from parameterized import parameterized
 
+from utils.cf_roles import Role, RoleCollector, retrieve_cf_client
+
 class FetchCfMetadata(ComplianceFetcher):
+  def fetch_org_roles(self):
+    with raw_evidence(self.locker, "cf/org-roles.json") as evidence:
+      if evidence:
+        client, org_guid = retrieve_cf_client()
+        role_collector = RoleCollector()
+        for role in map(Role, client.v3.roles.list(organization_guids=org_guid, include="user")):
+          role_collector.add(role)
+        evidence.set_content(role_collector.to_json())
+
+
+  @parameterized.expand(get_config().get("gov.cloud.space-names"), skip_on_empty=True)
+  def fetch_space_roles(self, space):
+    evidence_path = f"cf/space-{space}-user-roles.json"
+    with raw_evidence(self.locker, evidence_path) as evidence:
+      if evidence:
+        client, space_guid = retrieve_cf_client(space)
+        role_collector = RoleCollector()
+        for role in map(Role, client.v3.roles.list(space_guids=space_guid, include="user")):
+          role_collector.add(role)
+        evidence.set_content(role_collector.to_json())
+
   @parameterized.expand(get_config().get("gov.cloud.space-names"), skip_on_empty=True)
   def fetch_prod_ssh(self, space):
     evidence_path = f"cf/space-{space}-ssh.json"
