@@ -48,9 +48,10 @@ class User:
   @property
   def username(self):
     if self._is_service_account:
-      return client.v3.service_credential_bindings.get(
+      service_name = client.v3.service_credential_bindings.get(
         self._username, include="service_instance"
       ).service_instance()["name"]
+      return f"{service_name} ({self._username})"
     else:
       return self._username
 
