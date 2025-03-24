@@ -5,3 +5,4 @@ auditree-plant @ git+https://github.com/ComplianceAsCode/auditree-plant.git
 compliance-to-policy ~= 0.4
 cloudfoundry-client ~= 1.37
 python-frontmatter ~= 1.1
+python-dateutil ~= 2.9
