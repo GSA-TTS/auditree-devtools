@@ -4,7 +4,7 @@ set -e
 
 python c2p/compliance_to_policy.py -c cdef.json -o auditree/auditree.json
 
-(cd auditree && compliance --check devtools.arboretum.accred,devtools.cloudgov.accred -C auditree.json --evidence full-remote)
+(cd auditree && compliance --check devtools.arboretum.accred,devtools.cloudgov.accred,devtools.trestle.accred -C auditree.json --evidence full-remote)
 
 if [ "$1" = "" ]; then
   ar="$(mktemp -d)/auditree.json"

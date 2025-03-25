@@ -1,8 +1,6 @@
 import json
 import subprocess
 
-from cloudfoundry_client.client import CloudFoundryClient
-
 from compliance.evidence import raw_evidence
 from compliance.fetch import ComplianceFetcher
 

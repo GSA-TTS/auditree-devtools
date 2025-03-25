@@ -24,5 +24,8 @@
       "org-name": "",
       "space-names": []
     }
+  },
+  "trestle": {
+    "governed_docs": []
   }
 }

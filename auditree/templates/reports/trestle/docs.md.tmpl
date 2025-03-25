@@ -1,0 +1,31 @@
+{#- -*- mode:jinja2; coding: utf-8 -*- -#}
+
+# {{ test.title }} Report {{ now.strftime('%Y-%m-%d') }}
+
+{% if test.total_issues_count(results) == 0 %}
+  **No Governed Documents issues to report**
+{% else %}
+{% if test.warnings_for_check_count(results) > 0 -%}
+{% for section_heading, warnings in all_warnings.items() -%}
+## {{ section_heading }} warnings
+{% for warning in warnings: %}
+* {{ warning }}
+{% endfor -%}
+{% endfor -%}
+{% endif -%}
+{% if test.failures_for_check_count(results) > 0 -%}
+{% for section_heading, failures in all_failures.items() -%}
+## {{ section_heading }} Failures
+{% for failure in failures: %}
+{{ section_heading }} is out of compliance. It should be updated {{ failure['interval'] }}.
+
+Last run details:
+
+* **Last Updated:** `{{ failure['last_updated'] }}`
+* **Author:** `{{ failure['author'] | safe }}`
+* **Filename:** `{{ failure['file_name'] }}`
+{% endfor %}
+
+{%- endfor -%}
+{% endif -%}
+{% endif -%}
