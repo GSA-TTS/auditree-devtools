@@ -1,17 +1,5 @@
-from subprocess import check_output
 import json
-from compliance.config import get_config
-from cloudfoundry_client.client import CloudFoundryClient
-
-client = CloudFoundryClient.build_from_cf_config()
-
-def retrieve_cf_client(space_name=None):
-  if space_name is None:
-    guid = check_output(f"cf org {get_config().get('gov.cloud.org-name')} --guid", shell=True).decode().strip()
-  else:
-    guid = check_output(f"cf space {space_name} --guid", shell=True).decode().strip()
-  return (client, guid)
-
+from utils.cf import client
 
 class RoleCollector:
   def __init__(self):
