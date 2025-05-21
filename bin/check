@@ -4,6 +4,10 @@ set -e
 
 python c2p/compliance_to_policy.py -c cdef.json -o auditree/auditree.json
 
+if [ -n "$CF_USERNAME" ]; then
+  cf auth
+fi
+
 (cd auditree && compliance --check devtools.arboretum.accred,devtools.cloudgov.accred,devtools.trestle.accred -C auditree.json --evidence full-remote)
 
 if [ "$1" = "" ]; then

@@ -7,6 +7,8 @@ from compliance.config import get_config
 
 from parameterized import parameterized
 
+from utils.cf import collect_space_names
+
 class SpaceSSHDisabledCheck(ComplianceCheck):
   @property
   def title(self):
@@ -14,6 +16,13 @@ class SpaceSSHDisabledCheck(ComplianceCheck):
 
   @parameterized.expand(get_config().get("gov.cloud.space-names"), skip_on_empty=True)
   def test_space_ssh_disabled(self, space):
+    if space == "*":
+      for space in collect_space_names():
+        self._test_space_ssh_disabled(space)
+    else:
+      self._test_space_ssh_disabled(space)
+
+  def _test_space_ssh_disabled(self, space):
     evidence_path = f"raw/cf/space-{space}-ssh.json"
     with evidences(self, evidence_path) as evidence:
       evidence = json.loads(evidence.content)
@@ -65,6 +74,13 @@ class UserRoleReport(ComplianceCheck):
 
   @parameterized.expand(get_config().get("gov.cloud.space-names"), skip_on_empty=True)
   def test_user_role_report(self, space):
+    if space == "*":
+      for space in collect_space_names():
+        self._test_user_role_report(space)
+    else:
+      self._test_user_role_report(space)
+
+  def _test_user_role_report(self, space):
     evidence_path = f"raw/cf/space-{space}-user-roles.json"
     with evidences(self, evidence_path) as evidence:
       self._process_users(evidence)
