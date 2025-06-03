@@ -2,7 +2,7 @@ auditree-framework @ git+https://github.com/ComplianceAsCode/auditree-framework.
 auditree-arboretum ~= 0.17
 auditree-prune @ git+https://github.com/ComplianceAsCode/auditree-prune.git
 auditree-plant @ git+https://github.com/ComplianceAsCode/auditree-plant.git
-compliance-to-policy ~= 0.4
-cloudfoundry-client ~= 1.37
+compliance-to-policy ~= 0.5
+cloudfoundry-client ~= 1.38
 python-frontmatter ~= 1.1
 python-dateutil ~= 2.9
