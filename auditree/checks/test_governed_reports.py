@@ -38,13 +38,16 @@ class GovernedReportsCheck(ComplianceCheck):
           case _:
             self.add_warnings(doc_name, f"Unknown refresh_interval `{refresh_interval}`")
 
-        if datetime.now(timezone.utc) > report_due:
-          self.add_failures(doc_name, {
-            "author": last_update["author"],
-            "last_updated": last_update["date"],
-            "file_name": last_update["file_name"],
-            "interval": refresh_interval
-          })
+        doc_metadata = {
+          "author": last_update["author"],
+          "last_updated": last_update["date"],
+          "file_name": last_update["file_name"],
+          "interval": refresh_interval
+        }
+        if datetime.now(timezone.utc) < report_due:
+          self.add_successes(doc_name, doc_metadata)
+        else:
+          self.add_failures(doc_name, doc_metadata)
 
   def get_reports(self):
     return ["trestle/docs.md"]
