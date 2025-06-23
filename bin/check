@@ -1,22 +1,75 @@
 #! /usr/bin/env bash
 
+mode="full-remote"
+cdef="./cdef.json"
+config="./auditree.template.json"
+output_path=$(mktemp -d)
+accred="devtools.arboretum.accred,devtools.cloudgov.accred,devtools.trestle.accred"
+
+usage="
+$0: Run evidence checkers
+
+Usage:
+  $0 -h
+  $0 [-c CDEF] [-t AUDITREE_CONFIG] [-a ACCRED] [-m MODE] [-o RESULT_OUTPUT_PATH]
+
+Options:
+-h: show help and exit
+-c CDEF: OSCAL component definition file to use for building auditree config. Defaults to $cdef
+-t AUDITREE_CONFIG: auditree template config file. Will be used as entire config if -c file is missing. Defaults to $config
+-a ACCRED: comma separated list of checks to make. Defaults to $accred
+-m MODE: Auditree operation mode. One of: local, no-push, full-remote. Defaults to $mode
+-o RESULT_OUTPUT_PATH: Path to auditree.json OSCAL Assessment Results file to write. Defaults to random directory in /tmp
+"
+
 set -e
 
-python c2p/compliance_to_policy.py -c cdef.json -o auditree/auditree.json
+while getopts "hc:t:m:o:a:" opt; do
+  case "$opt" in
+    c)
+      cdef=${OPTARG}
+      ;;
+    t)
+      config=${OPTARG}
+      ;;
+    a)
+      accred=${OPTARG}
+      ;;
+    m)
+      mode=${OPTARG}
+      ;;
+    o)
+      output_path=${OPTARG}
+      ;;
+    h)
+      echo "$usage"
+      exit 0
+      ;;
+  esac
+done
+
+if [ -f "$cdef" ]; then
+  python c2p/compliance_to_policy.py -c "$cdef" -t "$config" -o auditree/auditree.json
+else
+  cp "$config" auditree/auditree.json
+fi
 
 if [ -n "$CF_USERNAME" ]; then
   cf auth
 fi
 
-(cd auditree && compliance --check devtools.arboretum.accred,devtools.cloudgov.accred,devtools.trestle.accred -C auditree.json --evidence full-remote)
+(cd auditree && compliance --check "$accred" -C auditree.json --evidence "$mode")
 
-if [ "$1" = "" ]; then
-  ar="$(mktemp -d)/auditree.json"
-else
-  ar="$1/auditree.json"
+if [ -f "$cdef" ]; then
+  ar="${output_path}/auditree.json"
+  python c2p/result_to_compliance.py -c "$cdef" -i /tmp/compliance/check_results.json > $ar
+
+  if [ "$mode" != "local" ]; then
+    locker_repo=$(jq -r ".locker.repo_url" auditree/auditree.json)
+    if [ "$mode" = "full-remote" ]; then
+      plant-helper -f "$ar" -c assessment-results -d "Auditree check assessment-results" -l "$locker_repo"
+    else
+      plant-helper -f "$ar" -c assessment-results -d "Auditree check assessment-results" -l "$locker_repo" -n
+    fi
+  fi
 fi
-
-python c2p/result_to_compliance.py -c cdef.json -i /tmp/compliance/check_results.json > $ar
-
-locker_repo=`jq -r ".locker.repo_url" auditree/auditree.json`
-plant-helper -f "$ar" -c assessment-results -d "Auditree check assessment-results" -l "$locker_repo"

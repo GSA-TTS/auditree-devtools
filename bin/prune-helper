@@ -5,7 +5,7 @@ $0: Prune obsolete evidence from the evidence locker
 
 Usage:
     $0 -h
-    $0 -f FILE_PATH -r REASON -l LOCKER_URL [-b LOCKER_BRANCH] [-d]
+    $0 -f FILE_PATH -r REASON -l LOCKER_URL [-b LOCKER_BRANCH] [-n]
 
 Options:
 -h: show help and exit

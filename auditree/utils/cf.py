@@ -1,7 +1,9 @@
+import os
 from compliance.config import get_config
 from cloudfoundry_client.client import CloudFoundryClient
 
-client = CloudFoundryClient.build_from_cf_config()
+proxies = dict(http=os.getenv("http_proxy", ""), https=os.getenv("https_proxy", ""))
+client = CloudFoundryClient.build_from_cf_config(proxy = proxies)
 
 def org_guid():
   org = get_config().get("gov.cloud.org-name")

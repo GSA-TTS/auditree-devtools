@@ -3,6 +3,6 @@ auditree-arboretum ~= 0.17
 auditree-prune @ git+https://github.com/ComplianceAsCode/auditree-prune.git
 auditree-plant @ git+https://github.com/ComplianceAsCode/auditree-plant.git
 compliance-to-policy ~= 0.5
-cloudfoundry-client ~= 1.38
+cloudfoundry-client @ git+https://github.com/GSA-TTS/cf-python-client.git@57f069bd181e1e134c2847f8e5a0695859120178
 python-frontmatter ~= 1.1
 python-dateutil ~= 2.9

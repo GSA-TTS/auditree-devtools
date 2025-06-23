@@ -1,8 +1,8 @@
 #! /usr/bin/env bash
 
 if [ "$1" != "init" ]; then
-  if [ -z "$GITHUB_TOKEN" ]; then
-    echo "Must pass github token to script"
+  if [ -z "$GITHUB_TOKEN" ] && [ -z "$GITLAB_TOKEN" ]; then
+    echo "Must pass github or gitlab token to script"
     exit 1
   fi
   if [ -z "$GIT_EMAIL" ]; then
