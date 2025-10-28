@@ -27,6 +27,8 @@ class GovernedReportsCheck(ComplianceCheck):
         match refresh_interval:
           case "annually":
             report_due = last_update_dt + relativedelta(years=1)
+          case "quarterly":
+            report_due = last_update_dt + relativedelta(months=3)
           case "monthly":
             report_due = last_update_dt + relativedelta(months=1)
           case "biweekly":
